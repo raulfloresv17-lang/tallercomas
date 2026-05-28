@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- ANTI CACHE -->
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+
+<title>Todos los Productos</title>
+
+<link rel="icon" type="image/png" href="favicon.png?v=1">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial;
+}
+
+body{
+background:linear-gradient(135deg,#dbeafe,#eff6ff,#f8fafc);
+padding:20px;
+min-height:100vh;
+}
+
+/* PRELOADER */
+#preloader{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:#0f172a;
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:99999;
+}
+
+.loader-box{
+text-align:center;
+color:white;
+}
+
+.loader-box img{
+width:90px;
+height:90px;
+animation:spin 1.2s linear infinite;
+}
+
+.loader-box p{
+margin-top:12px;
+font-size:16px;
+font-weight:bold;
+}
+
+@keyframes spin{
+0%{transform:rotate(0deg);}
+100%{transform:rotate(360deg);}
+}
+
+/* LOGO */
+.logo{
+text-align:center;
+margin-bottom:25px;
+}
+
+.logo img{
+width:260px;
+object-fit:contain;
+}
+
+/* BUSCADOR */
+.search-box{
+max-width:700px;
+margin:auto;
+margin-bottom:25px;
+background:white;
+padding:20px;
+border-radius:22px;
+box-shadow:0 10px 35px rgba(0,0,0,0.08);
+border:1px solid #e5e7eb;
+}
+
+.search-box input{
+width:100%;
+padding:18px;
+border-radius:16px;
+border:1px solid #cbd5e1;
+font-size:17px;
+outline:none;
+background:#f8fafc;
+font-weight:bold;
+transition:0.2s;
+}
+
+.search-box input:focus{
+border-color:#2563eb;
+box-shadow:0 0 0 4px rgba(37,99,235,0.15);
+background:white;
+}
+
+/* GRID */
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:14px;
+max-width:1400px;
+margin:auto;
+justify-content:center;
+}
+
+/* TARJETA */
+.card{
+background:white;
+border-radius:20px;
+padding:14px;
+box-shadow:0 8px 25px rgba(0,0,0,0.08);
+border:1px solid #e5e7eb;
+transition:0.2s;
+display:flex;
+flex-direction:column;
+max-width:260px;
+width:100%;
+margin:auto;
+}
+
+.card:hover{
+transform:translateY(-4px);
+}
+
+/* IMAGEN */
+.card img{
+width:100%;
+height:140px;
+object-fit:contain;
+background:#f8fafc;
+border-radius:14px;
+padding:8px;
+border:1px solid #e5e7eb;
+margin-bottom:12px;
+}
+
+/* HEADER */
+.product-header{
+background:linear-gradient(135deg,#2563eb,#1e40af);
+border-radius:16px;
+padding:14px;
+color:white;
+text-align:center;
+margin-bottom:12px;
+box-shadow:0 8px 20px rgba(37,99,235,0.25);
+}
+
+.product-header .producto{
+font-size:18px;
+font-weight:bold;
+letter-spacing:1px;
+}
+
+.product-header .apodo{
+margin-top:6px;
+font-size:20px;
+font-weight:bold;
+text-transform:uppercase;
+}
+
+.product-header .marca{
+margin-top:6px;
+font-size:11px;
+font-weight:bold;
+opacity:0.95;
+line-height:1.4;
+}
+
+/* ITEMS */
+.item{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:10px 0;
+border-bottom:1px solid #f1f5f9;
+gap:8px;
+font-size:12px;
+font-weight:bold;
+color:#0f172a;
+}
+
+.item:last-child{
+border-bottom:none;
+}
+
+.label{
+color:#2563eb;
+font-weight:bold;
+}
+
+/* CASCOS Y PIN */
+.red-badge{
+background:#dc2626;
+color:white;
+padding:5px 10px;
+border-radius:10px;
+font-weight:bold;
+font-size:11px;
+}
+
+/* STOCK */
+.stock-box{
+margin-top:14px;
+background:linear-gradient(135deg,#0f172a,#1e293b);
+padding:14px;
+border-radius:16px;
+text-align:center;
+color:white;
+box-shadow:0 10px 25px rgba(15,23,42,0.25);
+}
+
+.stock-title{
+font-size:12px;
+font-weight:bold;
+opacity:0.9;
+margin-bottom:6px;
+}
+
+.stock-value{
+font-size:34px;
+font-weight:bold;
+letter-spacing:2px;
+}
+
+.stock-rojo{
+color:#ff4d4d;
+}
+
+/* BOTON PEDIR */
+.btn-pedir{
+margin-top:14px;
+width:100%;
+background:#16a34a;
+color:white;
+border:none;
+padding:12px;
+font-size:14px;
+font-weight:bold;
+border-radius:14px;
+cursor:pointer;
+transition:0.2s;
+}
+
+.btn-pedir:hover{
+background:#15803d;
+transform:translateY(-2px);
+}
+
+/* RESPONSIVE */
+@media(max-width:700px){
+
+.grid{
+grid-template-columns:repeat(3,1fr);
+gap:8px;
+}
+
+.card{
+padding:10px;
+max-width:100%;
+}
+
+.card img{
+height:90px;
+}
+
+.product-header{
+padding:10px;
+}
+
+.product-header .producto{
+font-size:12px;
+}
+
+.product-header .apodo{
+font-size:13px;
+}
+
+.product-header .marca{
+font-size:9px;
+}
+
+.item{
+font-size:9px;
+padding:6px 0;
+}
+
+.red-badge{
+font-size:8px;
+padding:4px 6px;
+}
+
+.stock-title{
+font-size:9px;
+}
+
+.stock-value{
+font-size:22px;
+}
+
+.btn-pedir{
+font-size:10px;
+padding:9px;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- PRELOADER -->
+<div id="preloader">
+<div class="loader-box">
+<img src="favicon.png?v=1" alt="logo">
+<p>Cargando productos...</p>
+</div>
+</div>
+
+<!-- LOGO -->
+<div class="logo">
+<img src="logo.png?v=1" alt="logo">
+</div>
+
+<!-- BUSCADOR -->
+<div class="search-box">
+
+<input
+type="text"
+id="buscar"
+placeholder="Buscar producto..."
+onkeyup="if(event.key==='Enter'){renderizarProductos()} else {renderizarProductos()}">
+
+<button onclick="limpiarBusqueda()" style="
+margin-top:12px;
+width:100%;
+padding:14px;
+border:none;
+border-radius:14px;
+background:#dc2626;
+color:white;
+font-size:16px;
+font-weight:bold;
+cursor:pointer;
+transition:0.2s;
+">
+🗑️ Borrar búsqueda
+</button>
+
+</div>
+
+<!-- PRODUCTOS -->
+<div class="grid" id="contenedor"></div>
+
+<script>
+
+let productos = [];
+
+/* ===== LIMPIAR CACHE ===== */
+localStorage.clear();
+sessionStorage.clear();
+
+/* ===== CARGAR PRODUCTOS ===== */
+async function cargarProductos(){
+
+try{
+
+let res = await fetch("productos.json?v=" + Date.now(),{
+cache:"no-store"
+});
+
+productos = await res.json();
+
+renderizarProductos();
+
+}catch(e){
+
+document.getElementById("contenedor").innerHTML = `
+<div style="
+background:white;
+padding:30px;
+border-radius:20px;
+font-weight:bold;
+color:red;
+text-align:center;
+max-width:500px;
+margin:auto;
+">
+Error cargando productos
+</div>
+`;
+
+}
+
+document.getElementById("preloader").style.display = "none";
+
+}
+
+/* ===== LIMPIAR BUSQUEDA ===== */
+function limpiarBusqueda(){
+
+document.getElementById("buscar").value = "";
+
+renderizarProductos();
+
+}
+
+/* ===== PEDIR PRODUCTO ===== */
+function pedirProducto(p){
+
+let cantidad = prompt("¿Cuántas unidades desea pedir?");
+
+if(cantidad === null || cantidad.trim() === ""){
+return;
+}
+
+let mensaje = `Hola, deseo pedir el siguiente producto:
+
+📦 Producto: ${p.producto || ""}
+🏷️ Código: ${p.codigo || ""}
+🔩 Cascos: ${p.cascos || ""}
+📌 Pin: ${p.pin || ""}
+📝 Apodo: ${p.apodo || ""}
+📦 Stock Disponible: ${p.stock || "0"}
+🛒 Cantidad Solicitada: ${cantidad}
+`;
+
+let url = "https://wa.me/51950333531?text=" + encodeURIComponent(mensaje);
+
+window.location.href = url;
+
+}
+
+/* ===== RENDER ===== */
+function renderizarProductos(){
+
+let buscar = document.getElementById("buscar")
+.value
+.toLowerCase()
+.trim();
+
+let contenedor = document.getElementById("contenedor");
+
+let filtrados = productos.filter(p => {
+
+return (
+(p.codigo || "").toLowerCase().includes(buscar) ||
+(p.producto || "").toLowerCase().includes(buscar) ||
+(p.marca || "").toLowerCase().includes(buscar) ||
+(p.modelo || "").toLowerCase().includes(buscar) ||
+(p.apodo || "").toLowerCase().includes(buscar)
+);
+
+});
+
+if(filtrados.length === 0){
+
+contenedor.innerHTML = `
+<div style="
+background:white;
+padding:30px;
+border-radius:22px;
+font-weight:bold;
+text-align:center;
+grid-column:1/-1;
+box-shadow:0 10px 30px rgba(0,0,0,0.08);
+">
+❌ No se encontraron productos
+</div>
+`;
+
+return;
+
+}
+
+contenedor.innerHTML = "";
+
+filtrados.forEach(p => {
+
+let stock = Number(p.stock || 0);
+
+contenedor.innerHTML += `
+
+<div class="card">
+
+${p.imagen ? `<img src="${p.imagen}" alt="">` : ""}
+
+<div class="product-header">
+
+<div class="producto">
+${p.producto || ""}
+</div>
+
+<div class="apodo">
+${p.apodo || ""}
+</div>
+
+<div class="marca">
+${p.marca || ""}<br>
+${p.modelo || ""}
+</div>
+
+</div>
+
+<div class="item">
+<span class="label">Código</span>
+<span>${p.codigo || ""}</span>
+</div>
+
+<div class="item">
+<span class="label">Cascos</span>
+<span class="red-badge">
+${p.cascos || ""}
+</span>
+</div>
+
+<div class="item">
+<span class="label">Pin</span>
+<span class="red-badge">
+${p.pin || ""}
+</span>
+</div>
+
+<div class="stock-box">
+
+<div class="stock-title">
+STOCK DISPONIBLE
+</div>
+
+<div class="stock-value ${stock === 0 ? 'stock-rojo' : ''}">
+${stock}
+</div>
+
+</div>
+
+<button class="btn-pedir"
+onclick='pedirProducto(${JSON.stringify(p).replace(/'/g,"&#39;")})'>
+🛒 Pedir
+</button>
+
+</div>
+
+`;
+
+});
+
+}
+
+cargarProductos();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- ANTI CACHE -->
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+
+<title>Buscar Producto</title>
+
+<link rel="icon" type="image/png" href="favicon.png?v=1">
+
+<style>
+
+*{
+box-sizing:border-box;
+}
+
+body{
+margin:0;
+font-family:Arial;
+background:#eef3fb;
+display:flex;
+flex-direction:column;
+align-items:center;
+padding:30px 15px;
+min-height:100vh;
+}
+
+/* LOGO */
+.logo{
+text-align:center;
+margin-bottom:20px;
+}
+
+.logo img{
+width:260px;
+object-fit:contain;
+}
+
+/* CARD PRINCIPAL */
+.card{
+background:white;
+width:100%;
+max-width:550px;
+padding:28px;
+border-radius:22px;
+box-shadow:0 10px 35px rgba(0,0,0,0.08);
+text-align:center;
+border:1px solid #e5e7eb;
+}
+
+/* TITULO */
+.title{
+font-size:26px;
+font-weight:bold;
+margin-bottom:22px;
+display:flex;
+justify-content:center;
+align-items:center;
+gap:10px;
+color:#0f172a;
+}
+
+/* INPUT */
+input{
+width:100%;
+padding:16px;
+border-radius:14px;
+border:1px solid #cbd5e1;
+outline:none;
+font-size:16px;
+margin-bottom:15px;
+transition:0.2s;
+background:#f8fafc;
+font-weight:bold;
+}
+
+input:focus{
+border-color:#2563eb;
+box-shadow:0 0 0 4px rgba(37,99,235,0.15);
+background:white;
+}
+
+/* BOTONES */
+.row{
+display:flex;
+gap:12px;
+}
+
+button{
+border:none;
+padding:14px;
+border-radius:14px;
+font-weight:bold;
+cursor:pointer;
+font-size:15px;
+transition:0.2s;
+width:100%;
+}
+
+.btn-blue{
+background:#2563eb;
+color:white;
+}
+
+.btn-blue:hover{
+background:#1d4ed8;
+transform:translateY(-1px);
+}
+
+.btn-red{
+background:#dc2626;
+color:white;
+}
+
+.btn-red:hover{
+background:#b91c1c;
+transform:translateY(-1px);
+}
+
+/* BOTON GRANDE */
+.big-btn{
+margin-top:20px;
+width:100%;
+background:#0f172a;
+color:white;
+padding:15px;
+border-radius:14px;
+font-weight:bold;
+text-decoration:none;
+display:block;
+transition:0.2s;
+}
+
+.big-btn:hover{
+background:#020617;
+}
+
+/* RESULTADO */
+.resultado{
+margin-top:22px;
+width:100%;
+max-width:550px;
+}
+
+/* CARD RESULTADO */
+.card-result{
+background:white;
+padding:22px;
+border-radius:22px;
+box-shadow:0 10px 30px rgba(0,0,0,0.08);
+margin-top:10px;
+border:1px solid #e5e7eb;
+animation:aparecer 0.2s ease;
+}
+
+@keyframes aparecer{
+from{
+opacity:0;
+transform:translateY(8px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+.card-result img{
+width:100%;
+max-height:320px;
+object-fit:contain;
+border-radius:16px;
+background:#f8fafc;
+padding:10px;
+margin-bottom:18px;
+border:1px solid #e5e7eb;
+}
+
+/* ITEMS */
+.item{
+font-size:16px;
+padding:12px 0;
+border-bottom:1px solid #f1f5f9;
+font-weight:bold;
+color:#0f172a;
+display:flex;
+justify-content:space-between;
+gap:10px;
+}
+
+.item:last-child{
+border-bottom:none;
+}
+
+.label{
+color:#2563eb;
+font-weight:bold;
+}
+
+/* FOOTER */
+footer{
+margin-top:25px;
+font-size:14px;
+color:#64748b;
+font-weight:bold;
+text-align:center;
+}
+
+/* RESPONSIVE */
+@media(max-width:600px){
+
+.card,
+.resultado{
+max-width:100%;
+}
+
+.row{
+flex-direction:column;
+}
+
+.title{
+font-size:22px;
+}
+
+.item{
+font-size:15px;
+flex-direction:column;
+align-items:flex-start;
+}
+
+}
+
+/* PRELOADER */
+#preloader{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:#0f172a;
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:99999;
+}
+
+.loader-box{
+text-align:center;
+color:white;
+}
+
+.loader-box img{
+width:90px;
+height:90px;
+animation:spin 1.2s linear infinite;
+}
+
+.loader-box p{
+margin-top:10px;
+font-size:16px;
+font-weight:bold;
+}
+
+@keyframes spin{
+0%{transform:rotate(0deg);}
+100%{transform:rotate(360deg);}
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="preloader">
+<div class="loader-box">
+<img src="favicon.png?v=1" alt="logo">
+<p>Cargando...</p>
+</div>
+</div>
+
+<div class="logo">
+<img src="logo.png?v=1" alt="logo">
+</div>
+
+<div class="card">
+
+<div class="title">🔎 Buscar Producto</div>
+
+<input
+type="text"
+id="codigo"
+placeholder="Ingresa código del producto"
+onkeypress="if(event.key==='Enter'){buscarProducto()}">
+
+<div class="row">
+<button class="btn-blue" onclick="buscarProducto()">Buscar</button>
+<button class="btn-red" onclick="limpiar()">Eliminar Datos</button>
+</div>
+
+<a href="inventario.html" class="big-btn">
+🔐 Todo los Productos
+</a>
+
+<a href="traslados.html"
+class="big-btn"
+style="background:#16a34a; margin-bottom:10px;">
+🚚 Traslado de Producto
+</a>
+
+<a href="ingreso.html"
+class="big-btn"
+style="background:#f5a000; margin-bottom:10px;">
+📦 Ingreso de Producto
+</a>
+
+</div>
+
+<div id="resultado" class="resultado"></div>
+
+<footer>
+Sistema creado por Raúl Flores
+</footer>
+
+<script>
+
+let productos = [];
+
+/* ===== LIMPIAR CACHE ===== */
+localStorage.clear();
+sessionStorage.clear();
+
+/* ===== CARGAR JSON NUEVO ===== */
+fetch("productos.json?v=" + Date.now(),{
+cache:"no-store"
+})
+.then(r=>r.json())
+.then(data=>{
+
+if(Array.isArray(data)){
+
+productos = data;
+
+}
+
+/* OCULTAR CARGADOR */
+document.getElementById("preloader").style.display = "none";
+
+})
+.catch(()=>{
+
+document.getElementById("preloader").style.display = "none";
+
+});
+
+/* ===== BUSCAR ===== */
+function buscarProducto(){
+
+let codigo = document
+.getElementById("codigo")
+.value
+.trim()
+.toLowerCase();
+
+let res = document.getElementById("resultado");
+
+if(codigo === ""){
+res.innerHTML = "";
+return;
+}
+
+let p = productos.find(x => {
+
+let cod = (x.codigo || x.Codigo || "")
+.toString()
+.trim()
+.toLowerCase();
+
+return cod === codigo;
+
+});
+
+if(!p){
+
+res.innerHTML = `
+<div class="card-result">
+
+<div style="
+font-size:18px;
+font-weight:bold;
+color:#dc2626;
+text-align:center;
+">
+❌ Producto no encontrado
+</div>
+
+</div>
+`;
+
+return;
+}
+
+let img = p.imagen || "";
+
+let codigoFinal = p.codigo || p.Codigo || "";
+let cascosFinal = p.cascos || p.Cascos || "";
+let pinFinal = p.pin || p.Pin || "";
+let productoFinal = p.producto || p.Producto || "";
+let marcaFinal = p.marca || p.Marca || "";
+let modeloFinal = p.modelo || p.Modelo || "";
+let apodoFinal = p.apodo || p.Apodo || "";
+let stockFinal = p.stock ?? p.Stock ?? "0";
+
+res.innerHTML = `
+
+<div class="card-result">
+
+${img ? `<img src="${img}">` : ""}
+
+<div style="
+background:linear-gradient(135deg,#2563eb,#1e40af);
+padding:18px;
+border-radius:18px;
+margin-bottom:18px;
+color:white;
+text-align:center;
+box-shadow:0 8px 20px rgba(37,99,235,0.25);
+">
+
+<div style="
+font-size:14px;
+opacity:0.9;
+margin-bottom:6px;
+font-weight:bold;
+">
+PRODUCTO ENCONTRADO
+</div>
+
+<div style="
+font-size:28px;
+font-weight:bold;
+letter-spacing:1px;
+">
+${productoFinal}
+</div>
+
+<div style="
+margin-top:10px;
+font-size:30px;
+font-weight:bold;
+opacity:1;
+letter-spacing:1px;
+text-transform:uppercase;
+">
+${apodoFinal}
+</div>
+
+<div style="
+margin-top:6px;
+font-size:16px;
+font-weight:bold;
+opacity:0.95;
+">
+${marcaFinal} ${modeloFinal}
+</div>
+
+</div>
+
+<div class="item">
+<span class="label">Código</span>
+<span>${codigoFinal}</span>
+</div>
+
+<div class="item">
+<span class="label">Cascos</span>
+
+<span style="
+background:#dc2626;
+color:white;
+padding:6px 14px;
+border-radius:10px;
+font-weight:bold;
+">
+${cascosFinal}
+</span>
+</div>
+
+<div class="item">
+<span class="label">Pin</span>
+
+<span style="
+background:#dc2626;
+color:white;
+padding:6px 14px;
+border-radius:10px;
+font-weight:bold;
+">
+${pinFinal}
+</span>
+</div>
+
+<div class="item">
+<span class="label">Apodo</span>
+<span>${apodoFinal}</span>
+</div>
+
+<div style="
+margin-top:20px;
+background:${Number(stockFinal) === 0 ? '#dc2626' : 'linear-gradient(135deg,#16a34a,#15803d)'};
+padding:25px;
+border-radius:22px;
+text-align:center;
+box-shadow:0 10px 25px rgba(0,0,0,0.15);
+">
+
+<div style="
+font-size:15px;
+font-weight:bold;
+letter-spacing:2px;
+color:white;
+opacity:0.9;
+margin-bottom:10px;
+">
+STOCK DISPONIBLE
+</div>
+
+<div style="
+font-size:65px;
+font-weight:bold;
+color:white;
+line-height:1;
+text-shadow:0 4px 10px rgba(0,0,0,0.2);
+">
+${stockFinal}
+</div>
+
+</div>
+
+</div>
+
+`;
+
+}
+
+/* ===== LIMPIAR ===== */
+function limpiar(){
+
+document.getElementById("codigo").value = "";
+
+document.getElementById("resultado").innerHTML = "";
+
+}
+
+</script>
+
+</body>
+</html>
